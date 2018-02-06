@@ -7,6 +7,8 @@ namespace CosmicGraph
     {
         Task<TVertex> AddChildAsync<TVertex>(string edgeName, string parentId, TVertex child) where TVertex : class, IVertex;
         Task<TVertex> AddChildAsync<TVertex>(string edgeName, IVertex parent, TVertex child) where TVertex : class, IVertex;
+        Task<TVertex> AddChildIfNotExistsAsync<TVertex>(string edgeName, string parentId, TVertex child) where TVertex : class, IVertex;
+        Task<TVertex> AddChildIfNotExistsAsync<TVertex>(string edgeName, IVertex parent, TVertex child) where TVertex : class, IVertex;
         Task AddEdgeAsync(string edgeName, string sourceId, string targetId);
         Task AddEdgeAsync(string edgeName, IVertex source, string targetId);
         Task AddEdgeAsync(string edgeName, string sourceId, IVertex target);

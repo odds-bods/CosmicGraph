@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CosmicGraph.Tester;
@@ -33,6 +32,26 @@ namespace CosmicGraph
         public async Task<TVertex> AddChildAsync<TVertex>(string edgeName, IVertex parent, TVertex child) where TVertex : class, IVertex
         {
             return await AddChildAsync(edgeName, parent.Id, child);
+        }
+
+        public async Task<TVertex> AddChildIfNotExistsAsync<TVertex>(string edgeName, string parentId, TVertex child) where TVertex : class, IVertex
+        {
+            var builder = new StringBuilder();
+            builder.Append($"g.V('{parentId}').outE('{edgeName}').inv().has('{nameof(child.Label).ToCamelCase()}', within('{child.Label}'))");
+
+            if (await ExecuteSingleAsync<TVertex>(builder.ToString(), true) == null)
+            {
+                return await AddChildAsync(edgeName, parentId, child);
+            }
+            else
+            {
+                return await GetVertexAtEdgePathAsync<TVertex>(parentId, new string[] { edgeName }, nameof(child.Label), new string[] { child.Label });
+            }
+        }
+
+        public async Task<TVertex> AddChildIfNotExistsAsync<TVertex>(string edgeName, IVertex parent, TVertex child) where TVertex : class, IVertex
+        {
+            return await AddChildIfNotExistsAsync(edgeName, parent.Id, child);
         }
 
         public async Task AddEdgeAsync(string edgeName, string sourceId, string targetId)
@@ -68,11 +87,14 @@ namespace CosmicGraph
                 builder.Append($".property('id', '{vertex.Id}')");
             }
 
-            foreach (var vertexProperty in vertex.Properties)
+            if (vertex.Properties != null)
             {
-                var property = vertexProperty.Value[0];
+                foreach (var vertexProperty in vertex.Properties)
+                {
+                    var property = vertexProperty.Value[0];
 
-                builder.Append($".property('{vertexProperty.Key.ToCamelCase()}', '{property.Value}')");
+                    builder.Append($".property('{vertexProperty.Key.ToCamelCase()}', '{property.Value}')");
+                }
             }
 
             return await ExecuteSingleAsync<TVertex>(builder.ToString());
