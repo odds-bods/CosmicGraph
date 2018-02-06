@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2003
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmicGraph", "CosmicGraph\CosmicGraph.csproj", "{7129A635-1912-4688-8AED-77BE75BE7199}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmicGraph.Tester", "CosmicGraph.Tester\CosmicGraph.Tester.csproj", "{7DD50485-3421-4979-AEFA-B5A2FFF5FB18}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7129A635-1912-4688-8AED-77BE75BE7199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7129A635-1912-4688-8AED-77BE75BE7199}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7129A635-1912-4688-8AED-77BE75BE7199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7129A635-1912-4688-8AED-77BE75BE7199}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DD50485-3421-4979-AEFA-B5A2FFF5FB18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DD50485-3421-4979-AEFA-B5A2FFF5FB18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DD50485-3421-4979-AEFA-B5A2FFF5FB18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DD50485-3421-4979-AEFA-B5A2FFF5FB18}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E00F82C6-99C4-4067-84F5-AE0541767DDF}
+	EndGlobalSection
+EndGlobal
