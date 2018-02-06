@@ -14,8 +14,10 @@ namespace CosmicGraph
         Task<TVertex> AddVertexAsync<TVertex>(TVertex vertex) where TVertex : class, IVertex;
         Task<TVertex> AddVertexIfNotExistsAsync<TVertex>(TVertex vertex) where TVertex : class, IVertex;
         Task ClearEntireGraphAsync();
-        Task<TVertex> GetVertexAtPathAsync<TVertex>(string rootId, string propertyName, IEnumerable<string> path) where TVertex : class, IVertex;
-        Task<TVertex> GetVertexAtPathAsync<TVertex>(IVertex root, string propertyName, IEnumerable<string> path) where TVertex : class, IVertex;
+        Task<TVertex> GetVertexAtEdgePathAsync<TVertex>(string rootId, IEnumerable<string> edgePath) where TVertex : class, IVertex;
+        Task<TVertex> GetVertexAtEdgePathAsync<TVertex>(IVertex root, IEnumerable<string> edgePath) where TVertex : class, IVertex;
+        Task<TVertex> GetVertexAtEdgePathAsync<TVertex>(string rootId, IEnumerable<string> edgePath, string propertyName, IEnumerable<string> propertyPath) where TVertex : class, IVertex;
+        Task<TVertex> GetVertexAtEdgePathAsync<TVertex>(IVertex root, IEnumerable<string> edgePath, string propertyName, IEnumerable<string> propertyPath) where TVertex : class, IVertex;
         Task<TVertex> GetVertexAsync<TVertex>(string id) where TVertex : class, IVertex;
         Task<bool> HasVertexAsync(string id);
         Task<bool> HasVertexAsync(IVertex vertex);

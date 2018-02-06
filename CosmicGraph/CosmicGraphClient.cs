@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CosmicGraph.Tester;
@@ -137,14 +138,48 @@ namespace CosmicGraph
             return await ExecuteSingleAsync<TVertex>($"g.V('{id}')");
         }
 
-        public Task<TVertex> GetVertexAtPathAsync<TVertex>(string rootId, string propertyName, IEnumerable<string> path) where TVertex : class, IVertex
+        public async Task<TVertex> GetVertexAtEdgePathAsync<TVertex>(string rootId, IEnumerable<string> edgePath) where TVertex : class, IVertex
         {
-            return Task.FromResult(default(TVertex));
+            var builder = new StringBuilder();
+            builder.Append($"g.V('{rootId}')");
+
+            foreach (var edge in edgePath)
+            {
+                builder.Append($".outE('{edge}').inv()");
+            }
+
+            return await ExecuteSingleAsync<TVertex>(builder.ToString());
         }
 
-        public async Task<TVertex> GetVertexAtPathAsync<TVertex>(IVertex root, string propertyName, IEnumerable<string> path) where TVertex : class, IVertex
+        public async Task<TVertex> GetVertexAtEdgePathAsync<TVertex>(IVertex root, IEnumerable<string> edgePath) where TVertex : class, IVertex
         {
-            return await GetVertexAtPathAsync<TVertex>(root.Id, propertyName, path);
+            return await GetVertexAtEdgePathAsync<TVertex>(root.Id, edgePath);
+        }
+
+        public async Task<TVertex> GetVertexAtEdgePathAsync<TVertex>(string rootId, IEnumerable<string> edgePath, string propertyName, IEnumerable<string> propertyPath) where TVertex : class, IVertex
+        {
+            var builder = new StringBuilder();
+            builder.Append($"g.V('{rootId}')");
+
+            var edgeEnumerator = edgePath.GetEnumerator();
+
+            foreach (var property in propertyPath)
+            {
+                if (!edgeEnumerator.MoveNext())
+                {
+                    edgeEnumerator.Reset();
+                    edgeEnumerator.MoveNext();
+                }
+
+                builder.Append($".outE('{edgeEnumerator.Current}').inv().has('{propertyName.ToCamelCase()}', within('{property}'))");
+            }
+
+            return await ExecuteSingleAsync<TVertex>(builder.ToString());
+        }
+
+        public async Task<TVertex> GetVertexAtEdgePathAsync<TVertex>(IVertex root, IEnumerable<string> edgePath, string propertyName, IEnumerable<string> propertyPath) where TVertex : class, IVertex
+        {
+            return await GetVertexAtEdgePathAsync<TVertex>(root.Id, edgePath, propertyName, propertyPath);
         }
 
         public async Task<bool> HasVertexAsync(string id)
