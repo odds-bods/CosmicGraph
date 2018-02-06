@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using CosmicGraph.Tester;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Graphs;
@@ -113,26 +112,6 @@ namespace CosmicGraph
         public async Task ClearEntireGraphAsync()
         {
             await ExecuteSingleAsync<object>("g.V().drop()", true);
-        }
-
-        private async Task<TResult> ExecuteBatchAsync<TResult>(GraphBatch batch)
-        {
-            var batchResult = default(TResult);
-
-            foreach (var expression in batch.Expressions)
-            {
-                var query = documentClient.CreateGremlinQuery<object>(collection, expression.Value);
-
-                while (query.HasMoreResults)
-                {
-                    foreach (var result in await query.ExecuteNextAsync<TResult>())
-                    {
-                        batchResult = result;
-                    }
-                }
-            }
-
-            return batchResult;
         }
 
         private async Task<TResult> ExecuteSingleAsync<TResult>(string expression, bool returnDefaultIfNoResult = false)
