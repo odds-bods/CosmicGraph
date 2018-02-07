@@ -27,7 +27,7 @@ namespace CosmicGraph.Tester
                 {
                     Label = "Jarvis",
                     Name = "Jarvis",
-                    Age = "9"
+                    Escapable = "a'b"
                 }
             );
 

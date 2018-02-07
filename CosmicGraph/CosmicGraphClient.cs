@@ -36,7 +36,7 @@ namespace CosmicGraph
         public async Task<TVertex> AddChildIfNotExistsAsync<TVertex>(string edgeName, string parentId, TVertex child) where TVertex : class, IVertex
         {
             var builder = new StringBuilder();
-            builder.Append($"g.V('{parentId}').outE('{edgeName}').inv().has('{nameof(child.Label).ToCamelCase()}', within('{child.Label}'))");
+            builder.Append($"g.V('{parentId}').outE('{edgeName}').inv().has('{nameof(child.Label).ToCamelCase()}', within('{child.Label.AddEscapeCharacters()}'))");
 
             if (await ExecuteSingleAsync<TVertex>(builder.ToString(), true) == null)
             {
@@ -44,7 +44,7 @@ namespace CosmicGraph
             }
             else
             {
-                return await GetVertexAtEdgePathAsync<TVertex>(parentId, new string[] { edgeName }, nameof(child.Label), new string[] { child.Label });
+                return await GetVertexAtEdgePathAsync<TVertex>(parentId, new string[] { edgeName }, nameof(child.Label), new string[] { child.Label.AddEscapeCharacters() });
             }
         }
 
@@ -79,7 +79,7 @@ namespace CosmicGraph
         public async Task<TVertex> AddVertexAsync<TVertex>(TVertex vertex) where TVertex : class, IVertex
         {
             var builder = new StringBuilder();
-            builder.Append($"g.addV('{vertex.Label}')");
+            builder.Append($"g.addV('{vertex.Label.AddEscapeCharacters()}')");
 
             if (!string.IsNullOrEmpty(vertex.Id))
             {
@@ -92,7 +92,9 @@ namespace CosmicGraph
                 {
                     var property = vertexProperty.Value[0];
 
-                    builder.Append($".property('{vertexProperty.Key.ToCamelCase()}', '{property.Value}')");
+                    var key = vertexProperty.Key.ToCamelCase();
+
+                    builder.Append($".property('{key}', '{property.Value.AddEscapeCharacters()}')");
                 }
             }
 
@@ -172,7 +174,7 @@ namespace CosmicGraph
                     edgeEnumerator.MoveNext();
                 }
 
-                builder.Append($".outE('{edgeEnumerator.Current}').inv().has('{propertyName.ToCamelCase()}', within('{property}'))");
+                builder.Append($".outE('{edgeEnumerator.Current}').inv().has('{propertyName.ToCamelCase()}', within('{property.AddEscapeCharacters()}'))");
             }
 
             return await ExecuteSingleAsync<TVertex>(builder.ToString());

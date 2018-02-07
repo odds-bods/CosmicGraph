@@ -4,5 +4,6 @@
     {
         public string Name { get { return Get(); } set { Set(value); } }
         public string Age { get { return Get(); } set { Set(value); } }
+        public string Escapable { get { return Get(); } set { Set(value); } }
     }
 }
