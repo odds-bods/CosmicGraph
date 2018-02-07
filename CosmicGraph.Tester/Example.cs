@@ -25,11 +25,16 @@ namespace CosmicGraph.Tester
             var dog = await cosmic.AddChildAsync("owner", fred,
                 new DogVertex
                 {
+                    Id = "Jarvis",
                     Label = "Jarvis",
                     Name = "Jarvis",
-                    Escapable = "a'b"
+                    Escapable = "a'b",
+                    SpecialChars = "Yüp"
                 }
             );
+
+            // check can find dog by property when contains special characters.
+            var jarvisSpecialFound = await cosmic.GetVertexAtEdgePathAsync<DogVertex>(fred, new string[] { "owner" }, nameof(dog.SpecialChars), new string[] { "Yüp" });
 
             // and a tail.
             var tail = await cosmic.AddChildAsync("tail", dog,
